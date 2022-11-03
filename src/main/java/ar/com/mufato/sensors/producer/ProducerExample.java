@@ -1,19 +1,20 @@
-package ar.com.mufato;
+package ar.com.mufato.sensors.producer;
 
-import org.apache.kafka.clients.producer.*;
-
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import ar.com.mufato.sensors.producer.infrastructure.PropertiesReader;
+import java.util.Properties;
+import java.util.Random;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
 public class ProducerExample {
 
-  public static void main(final String[] args) throws IOException {
+  public static void main(final String[] args) {
 
     // Load producer configuration settings from a local file
     String configFile = "src/main/resources/app.properties";
-    final Properties props = loadConfig(configFile);
-    final String topic = "purchases";
+    final Properties props = new PropertiesReader().loadConfig(configFile);
+    final String topic = "iot-events";
 
     String[] users = {"eabara", "jsmith", "sgarcia", "jbernard", "htanaka", "awalther"};
     String[] items = {"book", "alarm clock", "t-shirts", "gift card", "batteries"};
@@ -38,15 +39,4 @@ public class ProducerExample {
 
   }
 
-  // We'll reuse this function to load properties from the Consumer as well
-  public static Properties loadConfig(final String configFile) throws IOException {
-    if (!Files.exists(Paths.get(configFile))) {
-      throw new IOException(configFile + " not found.");
-    }
-    final Properties cfg = new Properties();
-    try (InputStream inputStream = new FileInputStream(configFile)) {
-      cfg.load(inputStream);
-    }
-    return cfg;
-  }
 }

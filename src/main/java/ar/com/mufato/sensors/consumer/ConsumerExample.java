@@ -1,5 +1,7 @@
-package ar.com.mufato;
+package ar.com.mufato.sensors.consumer;
 
+import ar.com.mufato.sensors.producer.ProducerExample;
+import ar.com.mufato.sensors.producer.infrastructure.PropertiesReader;
 import org.apache.kafka.clients.consumer.*;
 
 import java.time.Duration;
@@ -10,10 +12,10 @@ public class ConsumerExample {
 
   public static void main(final String[] args) throws Exception {
 
-    final String topic = "purchases";
+    final String topic = "iot-events";
 
     String configFile = "src/main/resources/app.properties";
-    final Properties props = ProducerExample.loadConfig(configFile);
+    final Properties props = new PropertiesReader().loadConfig(configFile);
 
     // Add additional properties.
     props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-java-getting-started");
@@ -24,10 +26,11 @@ public class ConsumerExample {
       while (true) {
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
         for (ConsumerRecord<String, String> record : records) {
-          String key = record.key();
+          //String key = record.key();
           String value = record.value();
           System.out.println(
-              String.format("Consumed event from topic %s: key = %-10s value = %s", topic, key, value));
+//              String.format("Consumed event from topic %s: key = %-10s value = %s", topic, key, value));
+              String.format("Consumed event from topic %s: value = %s", topic, value));
         }
       }
     }
